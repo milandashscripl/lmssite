@@ -3,11 +3,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import "../styles/auth.css";
 import { loginUser, registerUser } from "../api/authApi";
-import { saveAuth } from "../utils/authStorage";
+import { useAuth } from "../context/AuthContext";
 
 export default function Auth() {
   const [mode, setMode] = useState("login");
   const navigate = useNavigate();
+  const { login } = useAuth(); // ✅ IMPORTANT
 
   // common
   const [email, setEmail] = useState("");
@@ -28,9 +29,14 @@ export default function Auth() {
     }
   };
 
-  // REGISTER
+  // ================= REGISTER =================
   const handleRegister = async (e) => {
     e.preventDefault();
+
+    if (password !== confirmPassword) {
+      alert("Passwords do not match");
+      return;
+    }
 
     const formData = new FormData();
     formData.append("fullName", fullName);
@@ -49,19 +55,17 @@ export default function Auth() {
     }
   };
 
-  // LOGIN
-const handleLogin = async (e) => {
-  e.preventDefault();
-  try {
-    const res = await loginUser({ email, password });
-    saveAuth(res.data.token, res.data.user);
-    setToken(res.data.token); // 🔥 triggers rerender
-    navigate("/home");
-  } catch (err) {
-    alert(err.response?.data?.message || "Login failed");
-  }
-};
-
+  // ================= LOGIN =================
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await loginUser({ email, password });
+      login(res.data.token, res.data.user); // ✅ reactive auth
+      navigate("/home");
+    } catch (err) {
+      alert(err.response?.data?.message || "Login failed");
+    }
+  };
 
   return (
     <div className="auth-container">
@@ -128,7 +132,11 @@ const handleLogin = async (e) => {
 
               <label className="profile-upload">
                 <input type="file" accept="image/*" onChange={handleImage} />
-                {preview ? <img src={preview} alt="preview" /> : <span>Upload Photo</span>}
+                {preview ? (
+                  <img src={preview} alt="preview" />
+                ) : (
+                  <span>Upload Photo</span>
+                )}
               </label>
 
               <input
@@ -162,7 +170,7 @@ const handleLogin = async (e) => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 autoComplete="new-password"
-                required  
+                required
               />
 
               <input
