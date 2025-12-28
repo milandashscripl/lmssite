@@ -1,0 +1,146 @@
+.auth-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background:
+    radial-gradient(
+      circle at top right,
+      rgba(0, 229, 255, 0.15),
+      transparent 40%
+    ),
+    linear-gradient(135deg, #f8fafc, #ffe9);
+}
+
+
+.auth-card {
+  width: 390px;
+  padding: 2.4rem;
+  border-radius: 22px;
+  background: #ffffff;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  box-shadow:
+    0 20px 40px rgba(15, 23, 42, 0.12),
+    0 0 0 1px rgba(0, 229, 255, 0.08);
+}
+
+
+
+.auth-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 1.6rem;
+}
+
+.auth-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 1.6rem;
+}
+
+.auth-tabs button {
+  flex: 1;
+  background: transparent;
+  border: none;
+  padding: 12px 0;
+  font-size: 15px;
+  color: #64748b;
+  cursor: pointer;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.auth-tabs button.active {
+  color: #00bcd4;
+}
+
+.auth-tabs button.active::after {
+  content: "";
+  position: absolute;
+  left: 25%;
+  bottom: 0;
+  width: 50%;
+  height: 2px;
+  background: #00bcd4;
+  border-radius: 10px;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.auth-form h2 {
+  text-align: center;
+  color: #0f172a;
+  margin-bottom: 6px;
+}
+
+.auth-form input {
+  padding: 13px 14px;
+  border-radius: 12px;
+  border: 1px solid #cbd5e1;
+  background: #f8fafc;
+  color: #0f172a;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.auth-form input::placeholder {
+  color: #94a3b8;
+}
+
+.auth-form input:focus {
+  border-color: #00bcd4;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(0, 188, 212, 0.2);
+}
+
+.profile-upload {
+  height: 96px;
+  width: 96px;
+  margin: 0 auto 6px;
+  border-radius: 50%;
+  border: 2px dashed rgba(0, 188, 212, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  overflow: hidden;
+  color: #00bcd4;
+  font-size: 13px;
+  background: #f8fafc;
+  transition: all 0.3s ease;
+}
+
+.profile-upload:hover {
+  background: rgba(0, 188, 212, 0.1);
+}
+
+.profile-upload input {
+  display: none;
+}
+
+.profile-upload img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.auth-form button {
+  margin-top: 8px;
+  padding: 13px;
+  border-radius: 14px;
+  border: none;
+  background: linear-gradient(135deg, #00bcd4, #22d3ee);
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.auth-form button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 25px rgba(0, 188, 212, 0.4);
+}
