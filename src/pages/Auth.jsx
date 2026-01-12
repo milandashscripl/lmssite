@@ -8,13 +8,13 @@ import { useAuth } from "../context/AuthContext";
 export default function Auth() {
   const [mode, setMode] = useState("login");
   const navigate = useNavigate();
-  const { login } = useAuth(); // ✅ IMPORTANT
+  const { login } = useAuth();
 
-  // common
+  // Common
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  // register only
+  // Register only
   const [fullName, setFullName] = useState("");
   const [mobile, setMobile] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -29,13 +29,14 @@ export default function Auth() {
     }
   };
 
-  // ================= REGISTER =================
+  /* =======================
+     REGISTER
+  ======================= */
   const handleRegister = async (e) => {
     e.preventDefault();
 
     if (password !== confirmPassword) {
-      alert("Passwords do not match");
-      return;
+      return alert("Passwords do not match");
     }
 
     const formData = new FormData();
@@ -55,13 +56,26 @@ export default function Auth() {
     }
   };
 
-  // ================= LOGIN =================
+  /* =======================
+     LOGIN
+  ======================= */
   const handleLogin = async (e) => {
     e.preventDefault();
+
     try {
       const res = await loginUser({ email, password });
-      login(res.data.token, res.data.user); // ✅ reactive auth
-      navigate("/home");
+
+      // Save auth globally
+      login(res.data.token, res.data.user);
+
+      // Role-based redirect
+      const role = res.data.user.role;
+
+      if (role === "super_admin") navigate("/super-admin");
+      else if (role === "institute_admin") navigate("/institute");
+      else if (role === "teacher") navigate("/teacher");
+      else navigate("/home"); // student
+
     } catch (err) {
       alert(err.response?.data?.message || "Login failed");
     }
@@ -102,7 +116,6 @@ export default function Auth() {
                 placeholder="Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                autoComplete="username"
                 required
               />
 
@@ -111,7 +124,6 @@ export default function Auth() {
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                autoComplete="current-password"
                 required
               />
 
@@ -152,13 +164,12 @@ export default function Auth() {
                 placeholder="Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                autoComplete="username"
                 required
               />
 
               <input
                 type="tel"
-                placeholder="Contact Number"
+                placeholder="Mobile Number"
                 value={mobile}
                 onChange={(e) => setMobile(e.target.value)}
                 required
@@ -169,7 +180,6 @@ export default function Auth() {
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                autoComplete="new-password"
                 required
               />
 
@@ -178,7 +188,6 @@ export default function Auth() {
                 placeholder="Confirm Password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                autoComplete="new-password"
                 required
               />
 

@@ -1,43 +1,39 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 
-const AuthContext = createContext(null);
+const AuthContext = createContext();
 
-export function AuthProvider({ children }) {
+export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(null);
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const storedToken = localStorage.getItem("token");
-    const storedUser = localStorage.getItem("user");
-
-    if (storedToken && storedUser) {
-      setToken(storedToken);
-      setUser(JSON.parse(storedUser));
+    const saved = localStorage.getItem("auth");
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      setToken(parsed.token);
+      setUser(parsed.user);
     }
-  }, []);
+    setLoading(false); // 👈 always run AFTER reading localStorage
+  }, []); // 👈 empty array prevents infinite loop
 
   const login = (token, user) => {
-    localStorage.setItem("token", token);
-    localStorage.setItem("user", JSON.stringify(user));
+    localStorage.setItem("auth", JSON.stringify({ token, user }));
     setToken(token);
     setUser(user);
   };
 
-  const signout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+  const logout = () => {
+    localStorage.removeItem("auth");
     setToken(null);
     setUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ token, user, login, signout }}>
+    <AuthContext.Provider value={{ token, user, login, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );
-}
+};
 
-export function useAuth() {
-  return useContext(AuthContext);
-}
-   
+export const useAuth = () => useContext(AuthContext);
